@@ -1,2 +1,7 @@
-# water-reminder-bot
- A simple Python-based water reminder Discord bot.
+<p align="center">
+  <img width="255px" src="https://raw.githubusercontent.com/PyBotDevs/resources/base/water-reminder/logo-transparent.png">
+</p>
+
+<h1 align='center'>Water Reminder Bot, a simple water reminder Discord bot for Discord addicts.</h1>
+ 
+This Python-based bot is for Discord ~~addicts~~ users who are too lazy to install a seperate app on their phone for reminding them to drink water. However, having a water reminder bot on Discord allows for cross-platform data sync and use.
