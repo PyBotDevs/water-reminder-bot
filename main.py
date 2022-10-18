@@ -129,34 +129,6 @@ async def unsubscribe(ctx: SlashContext):
     await ctx.reply(embed=localembed)
 
 
-# @slash.slash(
-#     name="pause_subscription",
-#     description="Temporarily pauses your automatic water reminders"
-# )
-# async def pause_subscription(ctx: SlashContext):
-#     print(f"[main/command client] /pause_subscription command invoked by user")
-#     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
-#     if users[str(ctx.author.id)]["water_reminder"]["active"] is False: return await ctx.reply("Your water reminders are already paused.", hidden=True)
-#     users[str(ctx.author.id)]["water_reminder"]["active"] = False
-#     save()
-#     localembed = discord.Embed(title=":pause_button: Your water reminders have been paused!", description="Whenever you want to, you can resume your water reminders with `/resume_subscription`.", color=discord.Color.light_grey())
-#     await ctx.send(embed=localembed)
-
-
-# @slash.slash(
-#     name="resume_subscription",
-#     description="Resumes your automatic water reminders"
-# )
-# async def resume_subscription(ctx: SlashContext):
-#     print(f"[main/command client] /resume_subscription command invoked by user")
-#     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
-#     if users[str(ctx.author.id)]["water_reminder"]["active"] is True: return await ctx.reply("Your water reminders are already active.", hidden=True)
-#     users[str(ctx.author.id)]["water_reminder"]["active"] = True
-#     save()
-#     localembed = discord.Embed(title=":arrow_forward: Your water reminders have been resumed!", description="You will now start receiving automatic water reminders again!", color=discord.Color.green())
-#     await ctx.send(embed=localembed)
-
-
 @slash.slash(
     name="status",
     description="Shows the current bot status, along with a few other details"
