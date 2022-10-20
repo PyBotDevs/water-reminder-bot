@@ -1,6 +1,8 @@
 ### NKA (aka. PyBotDevs) 2022. For enquiries contact <pybotdevs@outlook.com> ###
 
 # Imports
+from random import choices
+from click import option
 import discord
 from discord.ext import commands
 from discord.ext.commands import *
@@ -143,11 +145,9 @@ async def status(ctx: ApplicationContext):
 
 @client.slash_command(
     name="set_reminder_interval",
-    description="Sets a specified water reminder interval for you",
-    options=[
-        create_option(name="interval", description="How often do you want us to remind you to drink water?", option_type=str, required=True, choices=["30 minutes", "1 hour", "1.5 hours", "2 hours", "3 hours"])
-    ],
+    description="Sets a specified water reminder interval for you"
 )
+@option("interval", description="How often do you want us to remind you to drink water?", choices=["30 minutes", "1 hour", "1.5 hours", "2 hours", "3 hours"])
 async def set_reminder_interval(ctx: ApplicationContext, interval: str):
     print("[main/command client] /set_reminder_interval command invoked by user")
     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
