@@ -14,6 +14,7 @@ from framework.isobot.colors import Colors
 import json
 import asyncio
 from threading import Thread
+from discord import ApplicationContext
 
 # Configuration
 client = commands.Bot()
@@ -83,7 +84,7 @@ async def on_ready():
     name="subscribe",
     description="Sets up automatic water reminders for you"
 )
-async def subscribe(ctx: SlashContext):
+async def subscribe(ctx: ApplicationContext):
     print("[main/command client] /subscribe command invoked by user")
     if str(ctx.author.id) in users: return await ctx.reply("You are already subscribed to water reminders!", hidden=True)
     users[str(ctx.author.id)] = {
@@ -103,7 +104,7 @@ async def subscribe(ctx: SlashContext):
     name="subscription_list",
     description="Shows what reminders you are currently subscribed to"
 )
-async def subscription_list(ctx: SlashContext):
+async def subscription_list(ctx: ApplicationContext):
     print("[main/command client] /subscription_list command invoked by user")
     localembed = discord.Embed(title="Your subscription list", color=theme_color)
     if str(ctx.author.id) in users:
@@ -117,7 +118,7 @@ async def subscription_list(ctx: SlashContext):
     name="unsubscribe",
     description="Stops sending automatic water reminders to you"
 )
-async def unsubscribe(ctx: SlashContext):
+async def unsubscribe(ctx: ApplicationContext):
     print("[main/command client] /unsubscribe command invoked by user")
     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     del users[str(ctx.author.id)]
@@ -131,7 +132,7 @@ async def unsubscribe(ctx: SlashContext):
     name="status",
     description="Shows the current bot status, along with a few other details"
 )
-async def status(ctx: SlashContext):
+async def status(ctx: ApplicationContext):
     print("[main/command client] /status command invoked by user")
     localembed = discord.Embed(title="Bot status", color=theme_color)
     localembed.add_field(name="Current Latency (ping)", value=f"{round(client.latency, 2)} ms")
@@ -147,7 +148,7 @@ async def status(ctx: SlashContext):
         create_option(name="interval", description="How often do you want us to remind you to drink water?", option_type=str, required=True, choices=["30 minutes", "1 hour", "1.5 hours", "2 hours", "3 hours"])
     ],
 )
-async def set_reminder_interval(ctx: SlashContext, interval: str):
+async def set_reminder_interval(ctx: ApplicationContext, interval: str):
     print("[main/command client] /set_reminder_interval command invoked by user")
     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     secs = int()
