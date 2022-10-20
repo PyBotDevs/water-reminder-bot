@@ -18,8 +18,8 @@ import asyncio
 from threading import Thread
 
 # Configuration
-client = commands.Bot(command_prefix='w!', intents=discord.Intents.all())
-slash = SlashCommand(client, sync_commands=True)
+client = commands.Bot()
+# slash = SlashCommand(client, sync_commands=True)
 start_time = math.floor(time.time())
 start_timestamp = datetime.datetime.now()
 colors = Colors()
@@ -81,7 +81,7 @@ async def on_ready():
 
 
 # Commands
-@slash.slash(
+@client.slash_command(
     name="subscribe",
     description="Sets up automatic water reminders for you"
 )
@@ -101,7 +101,7 @@ async def subscribe(ctx: SlashContext):
     await reminder_daemon.start_reminder(ctx.author.id, 7200)
 
 
-@slash.slash(
+@client.slash_command(
     name="subscription_list",
     description="Shows what reminders you are currently subscribed to"
 )
@@ -115,7 +115,7 @@ async def subscription_list(ctx: SlashContext):
     await ctx.send(embed=localembed)
 
 
-@slash.slash(
+@client.slash_command(
     name="unsubscribe",
     description="Stops sending automatic water reminders to you"
 )
@@ -129,7 +129,7 @@ async def unsubscribe(ctx: SlashContext):
     await ctx.reply(embed=localembed)
 
 
-@slash.slash(
+@client.slash_command(
     name="status",
     description="Shows the current bot status, along with a few other details"
 )
@@ -142,7 +142,7 @@ async def status(ctx: SlashContext):
     await ctx.send(embed=localembed)
 
 
-@slash.slash(
+@client.slash_command(
     name="set_reminder_interval",
     description="Sets a specified water reminder interval for you",
     options=[
