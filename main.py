@@ -11,6 +11,7 @@ import json
 import asyncio
 from framework.isobot.colors import Colors
 from threading import Thread
+from discord import option
 from discord import ApplicationContext
 # from time import strftime
 
