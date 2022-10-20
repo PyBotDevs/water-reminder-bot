@@ -19,7 +19,7 @@ from threading import Thread
 from discord import ApplicationContext
 
 # Configuration
-client = commands.Bot()
+client = discord.Bot()
 # slash = SlashCommand(client, sync_commands=True)
 start_time = math.floor(time.time())
 start_timestamp = datetime.datetime.now()
