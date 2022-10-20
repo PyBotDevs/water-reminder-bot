@@ -1,22 +1,18 @@
 ### NKA (aka. PyBotDevs) 2022. For enquiries contact <pybotdevs@outlook.com> ###
 
 # Imports
-from random import choices
-from click import option
 import discord
-from discord.ext import commands
-from discord.ext.commands import *
 # import os
 import os.path
 import time
-# from time import strftime
 import datetime
 import math
-from framework.isobot.colors import Colors
 import json
 import asyncio
+from framework.isobot.colors import Colors
 from threading import Thread
 from discord import ApplicationContext
+# from time import strftime
 
 # Configuration
 client = discord.Bot()
