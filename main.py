@@ -26,7 +26,7 @@ colors = Colors()
 theme_color = discord.Color.blue()
 wdir = os.getcwd()
 with open('database/users.json', 'r') as f: users = json.load(f)
-print(f"[main/database] Databases successfully loaded")
+print("[main/database] Databases successfully loaded")
 
 
 # Functions
@@ -86,7 +86,7 @@ async def on_ready():
     description="Sets up automatic water reminders for you"
 )
 async def subscribe(ctx: SlashContext):
-    print(f"[main/command client] /subscribe command invoked by user")
+    print("[main/command client] /subscribe command invoked by user")
     if str(ctx.author.id) in users: return await ctx.reply("You are already subscribed to water reminders!", hidden=True)
     users[str(ctx.author.id)] = {
         "water_reminder": {
@@ -106,7 +106,7 @@ async def subscribe(ctx: SlashContext):
     description="Shows what reminders you are currently subscribed to"
 )
 async def subscription_list(ctx: SlashContext):
-    print(f"[main/command client] /subscription_list command invoked by user")
+    print("[main/command client] /subscription_list command invoked by user")
     localembed = discord.Embed(title="Your subscription list", color=theme_color)
     if str(ctx.author.id) in users:
         if users[str(ctx.author.id)]["water_reminder"]["active"] is True: localembed.add_field(name="Water Reminders", value="Currently Subscribed")
@@ -120,7 +120,7 @@ async def subscription_list(ctx: SlashContext):
     description="Stops sending automatic water reminders to you"
 )
 async def unsubscribe(ctx: SlashContext):
-    print(f"[main/command client] /unsubscribe command invoked by user")
+    print("[main/command client] /unsubscribe command invoked by user")
     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     del users[str(ctx.author.id)]
     save()
@@ -134,7 +134,7 @@ async def unsubscribe(ctx: SlashContext):
     description="Shows the current bot status, along with a few other details"
 )
 async def status(ctx: SlashContext):
-    print(f"[main/command client] /status command invoked by user")
+    print("[main/command client] /status command invoked by user")
     localembed = discord.Embed(title="Bot status", color=theme_color)
     localembed.add_field(name="Current Latency (ping)", value=f"{round(client.latency, 2)} ms")
     localembed.add_field(name="Client Startup Time", value=f"{math.floor(time.time()) - start_time} seconds")
@@ -150,7 +150,7 @@ async def status(ctx: SlashContext):
     ],
 )
 async def set_reminder_interval(ctx: SlashContext, interval: str):
-    print(f"[main/command client] /set_reminder_interval command invoked by user")
+    print("[main/command client] /set_reminder_interval command invoked by user")
     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     secs = int()
     if interval == "30 minutes": secs = 60*30
@@ -168,6 +168,6 @@ async def set_reminder_interval(ctx: SlashContext, interval: str):
 
 
 # Client Initialization
-print(f"[main/startup] Connecting to Discord API...")
+print("[main/startup] Connecting to Discord API...")
 try: client.run("")  # The bot token goes here (inside the "")
 except Exception as exc: print(f"[main/startup] {colors.red}Connection failed: {exc}{colors.end}")
