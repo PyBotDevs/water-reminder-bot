@@ -84,7 +84,7 @@ async def on_ready():
 )
 async def subscribe(ctx: ApplicationContext):
     print("[main/command client] /subscribe command invoked by user")
-    if str(ctx.author.id) in users: return await ctx.reply("You are already subscribed to water reminders!", hidden=True)
+    if str(ctx.author.id) in users: return await ctx.respond("You are already subscribed to water reminders!", hidden=True)
     users[str(ctx.author.id)] = {
         "water_reminder": {
             "active": True,
@@ -94,7 +94,7 @@ async def subscribe(ctx: ApplicationContext):
     }
     save()
     localembed = discord.Embed(title=":potable_water: Your water reminder is set!", description="We will now remind you every 2 hours to drink water.\nIf you ever want to cancel these reminders, you can type `/unsubscribe`.", color=theme_color)
-    await ctx.reply(embed=localembed)
+    await ctx.respond(embed=localembed)
     await reminder_daemon.start_reminder(ctx.author.id, 7200)
 
 
@@ -118,12 +118,12 @@ async def subscription_list(ctx: ApplicationContext):
 )
 async def unsubscribe(ctx: ApplicationContext):
     print("[main/command client] /unsubscribe command invoked by user")
-    if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
+    if str(ctx.author.id) not in users: return await ctx.respond("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     del users[str(ctx.author.id)]
     save()
     await reminder_daemon.stop_reminder(ctx.author.id)
     localembed = discord.Embed(title=":broken_heart: You have successfully unsubscribed from water reminders!", description="You will not be sent frequent reminders to drink water anymore.\nHowever, you can always subscribe back by using the `/subscribe` command!")
-    await ctx.reply(embed=localembed)
+    await ctx.respond(embed=localembed)
 
 
 @client.slash_command(
@@ -146,7 +146,7 @@ async def status(ctx: ApplicationContext):
 @option("interval", description="How often do you want us to remind you to drink water?", choices=["30 minutes", "1 hour", "1.5 hours", "2 hours", "3 hours"])
 async def set_reminder_interval(ctx: ApplicationContext, interval: str):
     print("[main/command client] /set_reminder_interval command invoked by user")
-    if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
+    if str(ctx.author.id) not in users: return await ctx.respond("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     secs = int()
     if interval == "30 minutes": secs = 60*30
     elif interval == "1 hour": secs = 60*60
