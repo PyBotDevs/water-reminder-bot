@@ -109,12 +109,12 @@ async def subscription_list(ctx: ApplicationContext):
         if users[str(ctx.author.id)]["water_reminder"]["active"] is True: localembed.add_field(name="Water Reminders", value="Currently Subscribed")
         elif users[str(ctx.author.id)]["water_reminder"]["active"] is False: localembed.add_field(name="Water Reminders", value="Subscription Paused")
     else: localembed.add_field(name="Water Reminders", value="Not Subscribed")
-    await ctx.send(embed=localembed)
+    await ctx.respond(embed=localembed)
 
 
 @client.slash_command(
     name="unsubscribe",
-    description="Stops sending automatic water reminders to you"
+    description="Stops responding automatic water reminders to you"
 )
 async def unsubscribe(ctx: ApplicationContext):
     print("[main/command client] /unsubscribe command invoked by user")
@@ -136,7 +136,7 @@ async def status(ctx: ApplicationContext):
     localembed.add_field(name="Current Latency (ping)", value=f"{round(client.latency, 2)} ms")
     localembed.add_field(name="Client Startup Time", value=f"{math.floor(time.time()) - start_time} seconds")
     localembed.add_field(name="Time Started", value=start_timestamp.strftime("%H:%M:%S on %d/%m/%Y"))
-    await ctx.send(embed=localembed)
+    await ctx.respond(embed=localembed)
 
 
 @client.slash_command(
@@ -158,7 +158,7 @@ async def set_reminder_interval(ctx: ApplicationContext, interval: str):
     await reminder_daemon.stop_reminder(ctx.author.id)
     time.sleep(0.1)
     localembed = discord.Embed(title=":white_check_mark: Interval set!", description=f"We will now remind you every {interval} to drink water!", color=theme_color)
-    await ctx.send(embed=localembed)
+    await ctx.respond(embed=localembed)
     await reminder_daemon.start_reminder(ctx.author.id, int(users[str(ctx.author.id)]["water_reminder"]["interval"]))
 
 
