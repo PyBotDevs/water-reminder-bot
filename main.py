@@ -2,7 +2,6 @@
 
 # Imports
 import discord
-# import os
 import os.path
 import time
 import datetime
@@ -13,6 +12,7 @@ from framework.isobot.colors import Colors
 from threading import Thread
 from discord import option
 from discord import ApplicationContext
+# import os
 # from time import strftime
 
 # Configuration
