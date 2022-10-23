@@ -2,24 +2,21 @@
 
 # Imports
 import discord
-from discord.ext import commands
-from discord_slash import SlashCommand, SlashContext
-from discord_slash.utils.manage_commands import create_option
-from discord.ext.commands import *
-# import os
 import os.path
 import time
-# from time import strftime
 import datetime
 import math
-from framework.isobot.colors import Colors
 import json
 import asyncio
+from framework.isobot.colors import Colors
 from threading import Thread
+from discord import option
+from discord import ApplicationContext
+# import os
+# from time import strftime
 
 # Configuration
-client = commands.Bot(command_prefix='w!', intents=discord.Intents.all())
-slash = SlashCommand(client, sync_commands=True)
+client = discord.Bot()
 start_time = math.floor(time.time())
 start_timestamp = datetime.datetime.now()
 colors = Colors()
@@ -81,13 +78,13 @@ async def on_ready():
 
 
 # Commands
-@slash.slash(
+@client.slash_command(
     name="subscribe",
     description="Sets up automatic water reminders for you"
 )
-async def subscribe(ctx: SlashContext):
+async def subscribe(ctx: ApplicationContext):
     print("[main/command client] /subscribe command invoked by user")
-    if str(ctx.author.id) in users: return await ctx.reply("You are already subscribed to water reminders!", hidden=True)
+    if str(ctx.author.id) in users: return await ctx.respond("You are already subscribed to water reminders!", hidden=True)
     users[str(ctx.author.id)] = {
         "water_reminder": {
             "active": True,
@@ -97,61 +94,59 @@ async def subscribe(ctx: SlashContext):
     }
     save()
     localembed = discord.Embed(title=":potable_water: Your water reminder is set!", description="We will now remind you every 2 hours to drink water.\nIf you ever want to cancel these reminders, you can type `/unsubscribe`.", color=theme_color)
-    await ctx.reply(embed=localembed)
+    await ctx.respond(embed=localembed)
     await reminder_daemon.start_reminder(ctx.author.id, 7200)
 
 
-@slash.slash(
+@client.slash_command(
     name="subscription_list",
     description="Shows what reminders you are currently subscribed to"
 )
-async def subscription_list(ctx: SlashContext):
+async def subscription_list(ctx: ApplicationContext):
     print("[main/command client] /subscription_list command invoked by user")
     localembed = discord.Embed(title="Your subscription list", color=theme_color)
     if str(ctx.author.id) in users:
         if users[str(ctx.author.id)]["water_reminder"]["active"] is True: localembed.add_field(name="Water Reminders", value="Currently Subscribed")
         elif users[str(ctx.author.id)]["water_reminder"]["active"] is False: localembed.add_field(name="Water Reminders", value="Subscription Paused")
     else: localembed.add_field(name="Water Reminders", value="Not Subscribed")
-    await ctx.send(embed=localembed)
+    await ctx.respond(embed=localembed)
 
 
-@slash.slash(
+@client.slash_command(
     name="unsubscribe",
-    description="Stops sending automatic water reminders to you"
+    description="Stops responding automatic water reminders to you"
 )
-async def unsubscribe(ctx: SlashContext):
+async def unsubscribe(ctx: ApplicationContext):
     print("[main/command client] /unsubscribe command invoked by user")
-    if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
+    if str(ctx.author.id) not in users: return await ctx.respond("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     del users[str(ctx.author.id)]
     save()
     await reminder_daemon.stop_reminder(ctx.author.id)
     localembed = discord.Embed(title=":broken_heart: You have successfully unsubscribed from water reminders!", description="You will not be sent frequent reminders to drink water anymore.\nHowever, you can always subscribe back by using the `/subscribe` command!")
-    await ctx.reply(embed=localembed)
+    await ctx.respond(embed=localembed)
 
 
-@slash.slash(
+@client.slash_command(
     name="status",
     description="Shows the current bot status, along with a few other details"
 )
-async def status(ctx: SlashContext):
+async def status(ctx: ApplicationContext):
     print("[main/command client] /status command invoked by user")
     localembed = discord.Embed(title="Bot status", color=theme_color)
     localembed.add_field(name="Current Latency (ping)", value=f"{round(client.latency, 2)} ms")
     localembed.add_field(name="Client Startup Time", value=f"{math.floor(time.time()) - start_time} seconds")
     localembed.add_field(name="Time Started", value=start_timestamp.strftime("%H:%M:%S on %d/%m/%Y"))
-    await ctx.send(embed=localembed)
+    await ctx.respond(embed=localembed)
 
 
-@slash.slash(
+@client.slash_command(
     name="set_reminder_interval",
-    description="Sets a specified water reminder interval for you",
-    options=[
-        create_option(name="interval", description="How often do you want us to remind you to drink water?", option_type=str, required=True, choices=["30 minutes", "1 hour", "1.5 hours", "2 hours", "3 hours"])
-    ],
+    description="Sets a specified water reminder interval for you"
 )
-async def set_reminder_interval(ctx: SlashContext, interval: str):
+@option("interval", description="How often do you want us to remind you to drink water?", choices=["30 minutes", "1 hour", "1.5 hours", "2 hours", "3 hours"])
+async def set_reminder_interval(ctx: ApplicationContext, interval: str):
     print("[main/command client] /set_reminder_interval command invoked by user")
-    if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
+    if str(ctx.author.id) not in users: return await ctx.respond("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     secs = int()
     if interval == "30 minutes": secs = 60*30
     elif interval == "1 hour": secs = 60*60
@@ -163,7 +158,7 @@ async def set_reminder_interval(ctx: SlashContext, interval: str):
     await reminder_daemon.stop_reminder(ctx.author.id)
     time.sleep(0.1)
     localembed = discord.Embed(title=":white_check_mark: Interval set!", description=f"We will now remind you every {interval} to drink water!", color=theme_color)
-    await ctx.send(embed=localembed)
+    await ctx.respond(embed=localembed)
     await reminder_daemon.start_reminder(ctx.author.id, int(users[str(ctx.author.id)]["water_reminder"]["interval"]))
 
 
