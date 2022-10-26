@@ -12,6 +12,7 @@ from framework.isobot.colors import Colors
 from threading import Thread
 from discord import option
 from discord import ApplicationContext
+from utils.ping import run, change_code
 # import os
 # from time import strftime
 
@@ -163,6 +164,14 @@ async def set_reminder_interval(ctx: ApplicationContext, interval: str):
 
 
 # Client Initialization
+print("[main/startup] Deploying Flask Application...")
+server = Thread(target=run)
+server.daemon = True
+server.start()
+print(f"[main/Flask] {colors.green}Flask Application successfully deployed!{colors.end}")
 print("[main/startup] Connecting to Discord API...")
 try: client.run("")  # The bot token goes here (inside the "")
-except Exception as exc: print(f"[main/startup] {colors.red}Connection failed: {exc}{colors.end}")
+except Exception as exc: 
+    print(f"[main/startup] {colors.red}Connection failed: {exc}{colors.end}")
+    print(f"[main/startup] {colors.red}Cleaning up environment: Stopping Flask Application...{colors.end}")
+    change_code(400)
