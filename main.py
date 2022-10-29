@@ -52,7 +52,7 @@ class ReminderDaemon:
         self.reminders.append(str(user_id))
         while str(user_id) in self.reminders:
             await asyncio.sleep(interval)
-            user_data = client.get_user(user_id)
+            user_data: discord.User = await client.fetch_user(str(user_id))
             localembed = discord.Embed(title="It's time to drink water!", description="Grab a glass or water bottle, and hydrate yourself!", color=theme_color)
             await user_data.send(embed=localembed)
 
