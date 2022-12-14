@@ -1,13 +1,7 @@
-### NKA (aka. PyBotDevs) 2022. For enquiries contact <pybotdevs@outlook.com> ###
+### NKA (aka. PyBotDevs) 2022. For enquiries please contact <pybotdevs@outlook.com> ###
 
 # Imports
-import discord
-import os.path
-import time
-import datetime
-import math
-import json
-import asyncio
+import discord, os.path, time, datetime, math, json, asyncio
 from framework.isobot.colors import Colors
 from threading import Thread
 from discord import option
@@ -56,17 +50,13 @@ class ReminderDaemon:
             localembed = discord.Embed(title="It's time to drink water!", description="Grab a glass or water bottle, and hydrate yourself!", color=theme_color)
             await user_data.send(embed=localembed)
 
-    async def stop_reminder(self, user_id: int):
-        self.reminders.remove(str(user_id))
+    async def stop_reminder(self, user_id: int): self.reminders.remove(str(user_id))
 
     async def start_all_reminders(self):
-        for x in users:
-            await self.start_reminder(int(x), users[str(x)]["water_reminder"]["interval"])
-
+        for x in users: await self.start_reminder(int(x), users[str(x)]["water_reminder"]["interval"])
 
 # Class Initialization
 reminder_daemon = ReminderDaemon()
-
 
 # Events
 @client.event
@@ -125,7 +115,6 @@ async def unsubscribe(ctx: ApplicationContext):
     await reminder_daemon.stop_reminder(ctx.author.id)
     localembed = discord.Embed(title=":broken_heart: You have successfully unsubscribed from water reminders!", description="You will not be sent frequent reminders to drink water anymore.\nHowever, you can always subscribe back by using the `/subscribe` command!")
     await ctx.respond(embed=localembed)
-
 
 @client.slash_command(
     name="status",
