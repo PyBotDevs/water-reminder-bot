@@ -1,8 +1,8 @@
-@slash.slash(
+@client.slash_command(
     name="pause_subscription",
     description="Temporarily pauses your automatic water reminders"
 )
-async def pause_subscription(ctx: SlashContext):
+async def pause_subscription(ctx: ApplicationContext):
     print(f"[main/command client] /pause_subscription command invoked by user")
     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     if users[str(ctx.author.id)]["water_reminder"]["active"] is False: return await ctx.reply("Your water reminders are already paused.", hidden=True)
@@ -11,12 +11,11 @@ async def pause_subscription(ctx: SlashContext):
     localembed = discord.Embed(title=":pause_button: Your water reminders have been paused!", description="Whenever you want to, you can resume your water reminders with `/resume_subscription`.", color=discord.Color.light_grey())
     await ctx.send(embed=localembed)
 
-
-@slash.slash(
+@client.slash_command(
     name="resume_subscription",
     description="Resumes your automatic water reminders"
 )
-async def resume_subscription(ctx: SlashContext):
+async def resume_subscription(ctx: ApplicationContext):
     print(f"[main/command client] /resume_subscription command invoked by user")
     if str(ctx.author.id) not in users: return await ctx.reply("Oops! Looks like you aren't subscribed to water reminders yet! (you can subscribe using `/subscribe` command)", hidden=True)
     if users[str(ctx.author.id)]["water_reminder"]["active"] is True: return await ctx.reply("Your water reminders are already active.", hidden=True)
