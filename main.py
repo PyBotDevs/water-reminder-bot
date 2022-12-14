@@ -20,12 +20,10 @@ wdir = os.getcwd()
 with open('database/users.json', 'r') as f: users = json.load(f)
 print("[main/database] Databases successfully loaded")
 
-
 # Functions
 def save():
     with open('database/users.json', 'w+') as f: json.dump(users, f, indent=4)
     print(f"[main/database] {colors.green}Database save request complete{colors.end}")
-
 
 # Classes
 class ReminderDaemon:
@@ -67,7 +65,6 @@ async def on_ready():
     try: await reminder_daemon.start_reminder_daemon()
     except RuntimeError: await reminder_daemon.start_reminder_daemon()
 
-
 # Commands
 @client.slash_command(
     name="subscribe",
@@ -88,7 +85,6 @@ async def subscribe(ctx: ApplicationContext):
     await ctx.respond(embed=localembed)
     await reminder_daemon.start_reminder(ctx.author.id, 7200)
 
-
 @client.slash_command(
     name="subscription_list",
     description="Shows what reminders you are currently subscribed to"
@@ -101,7 +97,6 @@ async def subscription_list(ctx: ApplicationContext):
         elif users[str(ctx.author.id)]["water_reminder"]["active"] is False: localembed.add_field(name="Water Reminders", value="Subscription Paused")
     else: localembed.add_field(name="Water Reminders", value="Not Subscribed")
     await ctx.respond(embed=localembed)
-
 
 @client.slash_command(
     name="unsubscribe",
@@ -128,7 +123,6 @@ async def status(ctx: ApplicationContext):
     localembed.add_field(name="Time Started", value=start_timestamp.strftime("%H:%M:%S on %d/%m/%Y"))
     await ctx.respond(embed=localembed)
 
-
 @client.slash_command(
     name="set_reminder_interval",
     description="Sets a specified water reminder interval for you"
@@ -150,7 +144,6 @@ async def set_reminder_interval(ctx: ApplicationContext, interval: str):
     localembed = discord.Embed(title=":white_check_mark: Interval set!", description=f"We will now remind you every {interval} to drink water!", color=theme_color)
     await ctx.respond(embed=localembed)
     await reminder_daemon.start_reminder(ctx.author.id, int(users[str(ctx.author.id)]["water_reminder"]["interval"]))
-
 
 # Client Initialization
 print("[main/startup] Deploying Flask Application...")
